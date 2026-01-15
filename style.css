@@ -1,0 +1,36 @@
+/* Background graphics */
+.hero {
+  background-image: url("https://img.freepik.com/free-vector/technology-digital-connection-network-background_1017-27428.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.86); /* smooth white overlay */
+  z-index: -1;
+}
+
+/* add relative so overlay fits properly */
+.hero {
+  position: relative;
+}
+
+/* background for gallery section */
+#gallery {
+  background-image: url("https://img.freepik.com/free-vector/abstract-digital-technology-background_23-2148899556.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* background for contact section */
+#contact {
+  background-image: url("https://img.freepik.com/free-vector/digital-technology-background-with-abstract-shape_1017-25588.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

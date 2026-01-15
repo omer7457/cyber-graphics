@@ -1,0 +1,1608 @@
+<?php
+session_start();
+
+/* ====== CHANGE THESE ====== */
+$LOGIN_USER = 'cyber';      // <--- your username
+$LOGIN_PASS = '1234';       // <--- your password
+/* ========================== */
+
+$error = '';
+
+if (isset($_POST['logout'])) {
+  session_destroy();
+  header("Location: index.php");
+  exit;
+}
+
+if (isset($_POST['username'], $_POST['password'])) {
+  if ($_POST['username'] === $LOGIN_USER && $_POST['password'] === $LOGIN_PASS) {
+    $_SESSION['logged_in'] = true;
+  } else {
+    $error = "Invalid username or password.";
+  }
+}
+
+$loggedIn = !empty($_SESSION['logged_in']);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cyber Graphics Online & Xerox Centre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cyber Graphics Online & Xerox Centre - Internet cafe and digital services centre for Aadhaar, PAN Card, Ration Card, Passport, Voter ID, CSC services, ticket booking, banking services and online application form filling." />
+  <style>
+    /* ---------- GLOBAL RESET ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #101936, #050814 55%, #02030a 100%);
+      color: #e9edf7;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ---------- LOGIN PAGE ---------- */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(10, 19, 60, 0.96);
+      border-radius: 18px;
+      padding: 1.5rem 1.6rem;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.8);
+      border: 1px solid rgba(144, 202, 249, 0.45);
+    }
+
+    .login-card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.2rem;
+      text-align: center;
+      color: #e3f2fd;
+    }
+
+    .login-card p {
+      font-size: 0.85rem;
+      text-align: center;
+      color: #b0bec5;
+      margin-bottom: 1rem;
+    }
+
+    .login-card label {
+      font-size: 0.8rem;
+      color: #c5cae9;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .login-card input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(144, 202, 249, 0.7);
+      padding: 0.45rem 0.6rem;
+      font-size: 0.86rem;
+      outline: none;
+      background: rgba(3, 9, 32, 0.9);
+      color: #e3f2fd;
+      margin-bottom: 0.7rem;
+    }
+
+    .login-card input:focus {
+      border-color: #42a5f5;
+      box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.6);
+    }
+
+    .login-error {
+      color: #ff8a80;
+      font-size: 0.8rem;
+      margin-bottom: 0.6rem;
+      text-align: center;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 0.2rem;
+    }
+
+    .login-hint {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 0.7rem;
+      color: #90a4ae;
+    }
+
+    /* ---------- HEADER / NAV ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(6, 16, 54, 0.9);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+      border-bottom: 1px solid rgba(74, 144, 226, 0.4);
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .logo span {
+      color: #ffeb3b;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    nav li a {
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      border: 1px solid transparent;
+    }
+
+    nav li a:hover,
+    nav li a.active-link {
+      background: linear-gradient(135deg, #1e88e5, #42a5f5);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(66, 165, 245, 0.8);
+      border-color: rgba(144, 202, 249, 0.5);
+    }
+
+    /* logout button in header */
+    .logout-form {
+      margin-left: 0.5rem;
+    }
+    .logout-form button {
+      background: transparent;
+      border: 1px solid rgba(244, 67, 54, 0.8);
+      color: #ffcdd2;
+      border-radius: 999px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .logout-form button:hover {
+      background: rgba(244, 67, 54, 0.15);
+    }
+
+    /* Make anchor scroll stop below sticky header */
+    section[id] {
+      scroll-margin-top: 90px;
+    }
+
+    /* ---------- REUSABLE ELEMENTS ---------- */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(33, 150, 243, 0.16);
+      padding: 0.25rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: #bbdefb;
+      margin-bottom: 0.6rem;
+      border: 1px solid rgba(144, 202, 249, 0.5);
+    }
+
+    .icon-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4caf50;
+      box-shadow: 0 0 10px #4caf50;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.3rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e53935, #ff7043);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(229, 57, 53, 0.55);
+      border: 1px solid rgba(255, 160, 122, 0.6);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 6px 18px rgba(229, 57, 53, 0.7);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(144, 202, 249, 0.8);
+      color: #bbdefb;
+    }
+
+    .btn-outline:hover {
+      background: rgba(144, 202, 249, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.6);
+    }
+
+    .btn-small {
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    .hero-badge {
+      font-size: 0.78rem;
+      color: #c5cae9;
+      margin-top: 0.4rem;
+    }
+
+    /* ---------- HERO SECTION ---------- */
+    .hero-section {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at top right, #283593 0, #0d1330 40%, #050814 90%);
+    }
+
+    .hero-section::before,
+    .hero-section::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hero-section::before {
+      width: 260px;
+      height: 260px;
+      background: #1e88e5;
+      top: -60px;
+      left: -40px;
+      animation: floatBlob 13s infinite alternate;
+    }
+
+    .hero-section::after {
+      width: 220px;
+      height: 220px;
+      background: #e53935;
+      bottom: -40px;
+      right: -40px;
+      animation: floatBlob 15s infinite alternate;
+    }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -20px) scale(1.1); }
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 2.3rem;
+      align-items: center;
+      padding: 3rem 0 2.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(1.9rem, 3.3vw, 2.6rem);
+      margin-bottom: 0.7rem;
+      color: #e3f2fd;
+    }
+
+    .hero-text h1 span {
+      color: #ffcc80;
+    }
+
+    .hero-text p {
+      font-size: 0.98rem;
+      margin-bottom: 1rem;
+      color: #e0e4ff;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+    }
+
+    .hero-img-wrapper {
+      position: relative;
+    }
+
+    .hero-img-main {
+      width: 100%;
+      border-radius: 22px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.75);
+      object-fit: cover;
+      max-height: 340px;
+      border: 1px solid rgba(144, 202, 249, 0.4);
+      animation: floatImage 6s ease-in-out infinite;
+    }
+
+    @keyframes floatImage {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .hero-tag {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(6, 16, 54, 0.9);
+      color: #fff;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(144, 202, 249, 0.7);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    /* ---------- SECTIONS, SERVICES, TICKETS, BANKING, ABOUT, GALLERY, REVIEWS ---------- */
+    section {
+      padding: 2.6rem 0;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      color: #bbdefb;
+      margin-bottom: 0.3rem;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      text-align: center;
+      color: #9fa8da;
+      margin-bottom: 1.6rem;
+    }
+
+    .section-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.05;
+      background-image:
+        linear-gradient(120deg, rgba(144, 202, 249, 0.5) 1px, transparent 1px),
+        linear-gradient(210deg, rgba(79, 195, 247, 0.4) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(circle at top, black 20%, transparent 70%);
+    }
+
+    .services-section { background: radial-gradient(circle at top, #11163a, #050814 70%); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-card {
+      background: rgba(9, 18, 58, 0.9);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(144, 202, 249, 0.25);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 26px rgba(33, 150, 243, 0.5);
+      border-color: rgba(144, 202, 249, 0.7);
+    }
+
+    .service-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: #e3f2fd;
+    }
+
+    .service-card p {
+      font-size: 0.83rem;
+      color: #c5cae9;
+    }
+
+    .badge-small {
+      display: inline-block;
+      font-size: 0.7rem;
+      background: rgba(56, 142, 60, 0.25);
+      color: #a5d6a7;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      margin-bottom: 0.4rem;
+      border: 1px solid rgba(165, 214, 167, 0.7);
+    }
+
+    .services-actions {
+      text-align: center;
+      margin: 1.2rem 0 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tickets-section { background: radial-gradient(circle at top, #0b253a, #050814 70%); }
+
+    .tickets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-card {
+      background: rgba(9, 20, 66, 0.9);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(120, 188, 255, 0.35);
+      font-size: 0.86rem;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .ticket-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(3, 169, 244, 0.6);
+      border-color: rgba(144, 202, 249, 0.9);
+    }
+
+    .ticket-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: #e3f2fd;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .ticket-card h3 span.icon {
+      font-size: 1.2rem;
+    }
+
+    .ticket-card ul {
+      padding-left: 1.1rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .ticket-card li {
+      font-size: 0.83rem;
+      margin-bottom: 0.2rem;
+      color: #c5cae9;
+    }
+
+    .banking-section { background: radial-gradient(circle at top, #061d33, #050814 70%); }
+
+    .about-section { background: radial-gradient(circle at top, #101c3f, #050814 70%); }
+
+    .about {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 1.8rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.8);
+      object-fit: cover;
+      max-height: 320px;
+      border: 1px solid rgba(144, 202, 249, 0.5);
+    }
+
+    .about ul {
+      padding-left: 1.1rem;
+      font-size: 0.9rem;
+      color: #c5cae9;
+    }
+
+    .about li {
+      margin-bottom: 0.3rem;
+    }
+
+    .gallery-section { background: radial-gradient(circle at top, #091426, #050814 70%); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.9rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      height: 180px;
+      box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(144, 202, 249, 0.35);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .gallery-grid img:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 26px rgba(144, 202, 249, 0.8);
+      border-color: rgba(144, 202, 249, 0.9);
+    }
+
+    .reviews-section { background: radial-gradient(circle at top, #081524, #050814 70%); }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .review-card {
+      background: rgba(11, 24, 63, 0.94);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(144, 202, 249, 0.4);
+      font-size: 0.86rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .review-card::before {
+      content: "“";
+      position: absolute;
+      top: -20px;
+      right: 10px;
+      font-size: 3.5rem;
+      color: rgba(144, 202, 249, 0.08);
+    }
+
+    .review-name {
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+      color: #e3f2fd;
+    }
+
+    .review-meta {
+      font-size: 0.75rem;
+      color: #9fa8da;
+      margin-bottom: 0.4rem;
+    }
+
+    .stars {
+      color: #ffca28;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .review-text {
+      font-size: 0.84rem;
+      color: #c5cae9;
+    }
+
+    /* ---------- STATUS TRACKING ---------- */
+    .status-section {
+      background: radial-gradient(circle at top, #0c2039, #050814 70%);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status-card {
+      background: rgba(10, 23, 63, 0.92);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(129, 199, 132, 0.45);
+      font-size: 0.86rem;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .status-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 26px rgba(76, 175, 80, 0.65);
+      border-color: rgba(165, 214, 167, 0.95);
+    }
+
+    .status-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+      color: #e8f5e9;
+    }
+
+    .status-card p {
+      font-size: 0.83rem;
+      margin-bottom: 0.7rem;
+      color: #c8e6c9;
+    }
+
+    /* ---------- TOKEN / QUEUE ---------- */
+    .token-section {
+      background: radial-gradient(circle at top, #041525, #02030a 70%);
+    }
+
+    .token-box {
+      max-width: 420px;
+      margin: 0 auto;
+      text-align: center;
+      background: rgba(10, 23, 63, 0.95);
+      border-radius: 18px;
+      padding: 1.4rem 1.2rem;
+      border: 1px solid rgba(144, 202, 249, 0.5);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.8);
+    }
+
+    .token-number {
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin: 0.4rem 0;
+      color: #ffeb3b;
+      text-shadow: 0 0 12px rgba(255, 235, 59, 0.7);
+    }
+
+    .token-info {
+      font-size: 0.86rem;
+      color: #c5cae9;
+      margin-bottom: 0.5rem;
+    }
+
+    .token-small {
+      font-size: 0.78rem;
+      color: #9fa8da;
+    }
+
+    /* ---------- CONTACT ---------- */
+    .contact-section {
+      background: radial-gradient(circle at top, #101c3a, #050814 70%);
+    }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 1.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-card {
+      background: rgba(10, 19, 60, 0.95);
+      border-radius: 16px;
+      padding: 1.3rem;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(144, 202, 249, 0.4);
+      font-size: 0.9rem;
+    }
+
+    .contact-card h3 {
+      font-size: 1rem;
+      color: #e3f2fd;
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-card p,
+    .contact-card li {
+      font-size: 0.86rem;
+      color: #c5cae9;
+    }
+
+    .contact-card ul {
+      padding-left: 1.1rem;
+      margin-top: 0.3rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .contact-form label {
+      font-size: 0.8rem;
+      color: #c5cae9;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      border-radius: 10px;
+      border: 1px solid rgba(144, 202, 249, 0.7);
+      padding: 0.45rem 0.6rem;
+      font-size: 0.86rem;
+      outline: none;
+      background: rgba(3, 9, 32, 0.9);
+      color: #e3f2fd;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: #9fa8da;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #42a5f5;
+      box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.6);
+    }
+
+    .contact-form textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      background: #020617;
+      color: #c5cae9;
+      text-align: center;
+      padding: 0.9rem 0;
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(144, 202, 249, 0.25);
+      margin-top: 1rem;
+    }
+
+    footer a {
+      color: #ffeb3b;
+      font-weight: 500;
+    }
+
+    /* ---------- TOAST ---------- */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(6, 16, 54, 0.98);
+      color: #fff;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 1000;
+      border: 1px solid rgba(144, 202, 249, 0.6);
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* ---------- FLOATING WHATSAPP BUTTON ---------- */
+    .floating-whatsapp {
+      position: fixed;
+      bottom: 18px;
+      left: 18px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+      z-index: 1100;
+      border: 2px solid #e0ffe9;
+      animation: pulseWhatsApp 1.6s infinite;
+    }
+
+    .floating-whatsapp:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 10px 24px rgba(37, 211, 102, 0.9);
+    }
+
+    @keyframes pulseWhatsApp {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+
+    /* ---------- SCROLL REVEAL ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 900px) {
+      .hero,
+      .about,
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 2.2rem;
+      }
+
+      .nav-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero-text h1 {
+        font-size: 1.6rem;
+      }
+
+      .hero-img-main {
+        max-height: 260px;
+      }
+
+      .floating-whatsapp {
+        width: 46px;
+        height: 46px;
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<?php if (!$loggedIn): ?>
+
+  <!-- ================== LOGIN SCREEN ONLY ================== -->
+  <div class="login-page">
+    <div class="login-card">
+      <h2>Cyber Graphics Login</h2>
+      <p>Enter username and password to access the website.</p>
+
+      <?php if ($error): ?>
+        <div class="login-error"><?php echo htmlspecialchars($error); ?></div>
+      <?php endif; ?>
+
+      <form method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+
+        <button type="submit" class="btn btn-primary login-btn">Login</button>
+      </form>
+
+      <div class="login-hint">
+        (Only for owner / staff use)
+      </div>
+    </div>
+  </div>
+
+<?php else: ?>
+
+  <!-- ================== FULL SITE WHEN LOGGED IN ================== -->
+
+<header>
+  <div class="container nav-bar">
+    <div class="logo">
+      Cyber Graphics <span>Online &amp; Xerox Centre</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#home" class="nav-link active-link">Home</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#tickets" class="nav-link">Ticket Booking</a></li>
+        <li><a href="#banking" class="nav-link">Banking</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="#reviews" class="nav-link">Reviews</a></li>
+        <li><a href="#status" class="nav-link">Status Track</a></li>
+        <li><a href="#token" class="nav-link">Token</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <form method="post" class="logout-form">
+      <button type="submit" name="logout">Logout</button>
+    </form>
+  </div>
+</header>
+
+<main id="home">
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="container hero">
+      <div class="hero-text reveal">
+        <div class="pill">
+          <span class="icon-dot"></span>
+          Live CSC &amp; Digital Seva Kendra – All Online Services Under One Roof
+        </div>
+        <h1>
+          Cyber Graphics <span>Online &amp; Xerox Centre</span>
+        </h1>
+        <p>
+          Your trusted local centre for <strong>Aadhaar &amp; PAN</strong> updates, 
+          <strong>Ration Card, Passport, Voter ID</strong> services, online form filling,
+          Xerox, printouts, ticket booking, banking services and internet browsing – fast and hassle free.
+        </p>
+
+        <p class="hero-badge">
+          Open on all working days • Professional service • Quick delivery of documents
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary"
+             href="https://wa.me/918884537740?text=Hello%2C%20I%20want%20to%20enquire%20about%20online%20services."
+             target="_blank" rel="noopener">
+            💬 Chat on WhatsApp
+          </a>
+          <a class="btn btn-outline" href="#contact">📍 Get Directions / Call</a>
+        </div>
+      </div>
+
+      <div class="hero-img-wrapper reveal">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipOTkEFEVibeqbc7keHcJIQyznKQdr3yAcgmpo9P=s680-w680-h510-rw" alt="Cyber Graphics Online & Xerox Centre Front View" class="hero-img-main" />
+        <div class="hero-tag">
+          Internet • CSC • Xerox • Print • Online Forms
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="services-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Our Digital &amp; Printing Services</h2>
+      <p class="section-subtitle reveal">
+        All government &amp; online work is handled carefully – you just bring your documents, rest we will manage.
+      </p>
+
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <span class="badge-small">Coming Soon</span>
+          <h3>Aadhaar Services</h3>
+          <p>
+            Aadhaar update, mobile number linking, address &amp; photo update, download &amp; print of e-Aadhaar.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>PAN Card Services</h3>
+          <p>
+            New PAN application, correction / update, e-PAN download &amp; print with acknowledgement.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>Ration Card &amp; Voter ID</h3>
+          <p>
+            New application, correction, address change, photo update and online status checking support.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>Passport Related Services</h3>
+          <p>
+            Online application form filling, appointment booking &amp; print of application / acknowledgement slips.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>CSC / Digital Seva</h3>
+          <p>
+            Government schemes, certificates, insurance, banking &amp; utility bill payments through CSC portal.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>Print, Xerox &amp; Scanning</h3>
+          <p>
+            Black &amp; colour print, photo print, lamination, Xerox, document scan &amp; email services.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>Online Application Forms</h3>
+          <p>
+            Admission forms, scholarship, competitive exams, job applications and all other online forms.
+          </p>
+        </div>
+
+        <div class="service-card reveal">
+          <h3>Internet &amp; Browsing</h3>
+          <p>
+            High speed internet for online exams practice, emails, downloads and other general browsing work.
+          </p>
+        </div>
+      </div>
+
+      <div class="services-actions reveal">
+        <a class="btn btn-outline btn-small" href="price-list.pdf" download>
+          ⬇ Download Service Price List (PDF)
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="services-actions reveal" style="margin-top: 0.8rem;">
+    <a class="btn btn-primary btn-small"
+       href="https://chat.whatsapp.com/H8cYxTVkcl03r0eIwoWVHN"
+       target="_blank" rel="noopener">
+       🔔 Join WhatsApp Group for Latest Scheme Updates
+    </a>
+  </div>
+
+  <!-- TICKET BOOKING -->
+  <section id="tickets" class="tickets-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Online E-Ticket Booking</h2>
+      <p class="section-subtitle reveal">
+        We help you book safe &amp; confirmed tickets for your travel – just share your journey details, we will do the rest.
+      </p>
+
+      <div class="tickets-grid">
+        <div class="ticket-card reveal">
+          <h3><span class="icon">✈️</span>Airplane Ticket Booking</h3>
+          <ul>
+            <li>Domestic &amp; international flight tickets</li>
+            <li>One-way, round trip &amp; multi-city</li>
+            <li>Printout &amp; WhatsApp copy of e-ticket</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20to%20book%20an%20airplane%20ticket."
+             target="_blank" rel="noopener">
+            Book Flight Ticket
+          </a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🚆</span>Train Ticket Booking</h3>
+          <ul>
+            <li>IRCTC reservation &amp; cancellation</li>
+            <li>General, Tatkal &amp; Waitlist enquiry</li>
+            <li>PNR printout and SMS update</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20to%20book%20a%20train%20ticket."
+             target="_blank" rel="noopener">
+            Book Train Ticket
+          </a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🚌</span>Bus Ticket Booking</h3>
+          <ul>
+            <li>Private &amp; Govt. bus tickets</li>
+            <li>AC, Non-AC, Sleeper &amp; Seater</li>
+            <li>Printed and WhatsApp ticket</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20to%20book%20a%20bus%20ticket."
+             target="_blank" rel="noopener">
+            Book Bus Ticket
+          </a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🌐</span>Other Online Bookings</h3>
+          <ul>
+            <li>Hotel bookings &amp; holiday packages</li>
+            <li>Movie &amp; event tickets</li>
+            <li>Online exam slots &amp; registrations</li>
+          </ul>
+          <a class="btn btn-outline btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20help%20with%20online%20booking."
+             target="_blank" rel="noopener">
+            Ask for Booking Help
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANKING -->
+  <section id="banking" class="banking-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Banking &amp; Financial Services</h2>
+      <p class="section-subtitle reveal">
+        Banking services available for all customers – easy account opening, cash services &amp; financial support.
+      </p>
+
+      <div class="tickets-grid">
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🏦</span>SBI Bank CSP</h3>
+          <ul>
+            <li>Zero Balance Account Opening</li>
+            <li>Cash Withdraw &amp; Money Transfer</li>
+            <li>Aadhaar Enabled Payment Services (AEPS)</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20to%20use%20SBI%20Bank%20CSP%20services."
+             target="_blank" rel="noopener">Get SBI CSP Service</a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🏛️</span>IndusInd Bank CSP</h3>
+          <ul>
+            <li>Zero Balance Account Opening</li>
+            <li>Cash Withdraw &amp; Money Transfer</li>
+            <li>Mobile Banking Assistance</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20IndusInd%20Bank%20CSP%20services."
+             target="_blank" rel="noopener">Get IndusInd CSP Service</a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">💳</span>Kotak Mahindra Bank</h3>
+          <ul>
+            <li>Zero Balance Account Opening</li>
+            <li>Debit Card &amp; Net Banking Setup</li>
+            <li>Customer Support Assistance</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20to%20open%20Kotak%20Zero%20Balance%20Account."
+             target="_blank" rel="noopener">Open Kotak Account</a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🛡️</span>SBI General &amp; Health Insurance</h3>
+          <ul>
+            <li>Life &amp; Term Insurance Plans</li>
+            <li>Health Insurance for Families &amp; Individuals</li>
+            <li>Vehicle / Two-Wheeler Insurance</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20Insurance%20information."
+             target="_blank" rel="noopener">Know More</a>
+        </div>
+
+        <div class="ticket-card reveal">
+          <h3><span class="icon">🏠</span>Piramal Finance</h3>
+          <ul>
+            <li>Loan Against Property</li>
+            <li>Fast &amp; Easy Approval Support</li>
+            <li>Guidance for Document Checklist</li>
+          </ul>
+          <a class="btn btn-primary btn-small"
+             href="https://wa.me/918884537740?text=I%20want%20Loan%20Against%20Property%20details."
+             target="_blank" rel="noopener">Apply for Loan</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about-section">
+    <div class="section-overlay"></div>
+    <div class="container about">
+      <div class="reveal">
+        <h2 class="section-title" style="text-align:left;">About Cyber Graphics Online &amp; Xerox Centre</h2>
+        <p style="font-size:0.9rem; margin-bottom:0.9rem; color:#c5cae9;">
+          Cyber Graphics Online &amp; Xerox Centre is a one-stop digital solution centre for your
+          government documentation, banking, and printing needs. We aim to provide
+          <strong>accurate, timely and friendly service</strong> so that you don’t have to struggle with online portals.
+        </p>
+        <ul>
+          <li>Experienced staff for Aadhaar, PAN, Passport, Voter ID &amp; Ration Card work.</li>
+          <li>Authorised CSC / Digital Seva services (where applicable).</li>
+          <li>Banking CSP support for SBI &amp; IndusInd.</li>
+          <li>High quality printers &amp; lamination machines for professional documents.</li>
+          <li>Support in English, Hindi and local language.</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <img src="https://lh3.googleusercontent.com/p/AF1QipP-efL2ERvHXyd5zrq6A3mq7c1tteAP-xsOQBv9=s680-w680-h510-rw" alt="Inside view of Cyber Graphics Online & Xerox Centre" class="about-img" />
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="gallery-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Shop Gallery</h2>
+      <p class="section-subtitle reveal">
+        Some photos of our shop, counters and services. Replace these images with your own photos.
+      </p>
+
+      <div class="gallery-grid">
+        <img class="reveal" src="https://5.imimg.com/data5/JK/FZ/YC/SELLER-13611704/online-form-filling-application.jpg" alt="Online application form filling" />
+        <img class="reveal" src="https://www.shop.xerox.com/media/catalog/product/cache/247919265758c7fae2976b94061a3d0f/b/8/b8100-series-cover-1000x1000.jpg" alt="Xerox and printing machines" />
+        <img class="reveal" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2dW_w7_SMmSuIHn_VqQXAmtvKhouae9ZpJg&s" alt="Customer waiting / seating area" />
+        <img class="reveal" src="https://d3jbu7vaxvlagf.cloudfront.net/small/v2/category_media/16433666596006_Daily_3_Rahil_Dhobi_CSC_280122_square.jpg" alt="CSC / Digital Seva banner at shop" />
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews" class="reviews-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Customer Reviews &amp; Ratings</h2>
+      <p class="section-subtitle reveal">
+        What our customers say about Cyber Graphics Online &amp; Xerox Centre.
+      </p>
+
+      <div class="reviews-grid">
+        <div class="review-card reveal">
+          <div class="review-name">Rafiq Ahmed</div>
+          <div class="review-meta">Aadhaar &amp; PAN Services</div>
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            Very helpful and polite service. My Aadhaar and PAN work was completed in a single visit without any tension.
+          </p>
+        </div>
+
+        <div class="review-card reveal">
+          <div class="review-name">Sneha Patil</div>
+          <div class="review-meta">Ticket Booking &amp; Online Forms</div>
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            They booked my flight and train tickets and also filled my scholarship application correctly. Highly recommended.
+          </p>
+        </div>
+
+        <div class="review-card reveal">
+          <div class="review-name">Mahesh Kumar</div>
+          <div class="review-meta">Banking &amp; Insurance</div>
+          <div class="stars">★★★★☆</div>
+          <p class="review-text">
+            I opened a zero balance account and took help for insurance. Staff guided me clearly about all documents.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATUS TRACKING (single, corrected) -->
+  <section id="status" class="status-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Track Your Application Status</h2>
+      <p class="section-subtitle reveal">
+        Quickly check the current status of your Aadhaar, PAN, Passport, Revenue or Speed Post consignment.
+      </p>
+
+      <div class="status-grid">
+        <div class="status-card reveal">
+          <h3>Aadhaar Status Track</h3>
+          <p>Check the status of your new Aadhaar enrolment or update request online.</p>
+          <a class="btn btn-outline btn-small" href="https://myaadhaar.uidai.gov.in/CheckAadhaarStatus/en" target="_blank" rel="noopener">
+            Open Aadhaar Status Page
+          </a>
+        </div>
+
+        <div class="status-card reveal">
+          <h3>NSDL PAN Card Status</h3>
+          <p>Track your PAN application status applied through NSDL / Protean.</p>
+          <a class="btn btn-outline btn-small" href="https://tin.tin.proteantech.in/pantan/StatusTrack.html" target="_blank" rel="noopener">
+            Open NSDL PAN Status
+          </a>
+        </div>
+
+        <div class="status-card reveal">
+          <h3>UTI PAN Card Status</h3>
+          <p>Check UTI PAN card application status using your application or coupon number.</p>
+          <a class="btn btn-outline btn-small" href="https://www.trackpan.utiitsl.com/PANONLINE/forms/TrackPan/trackApp" target="_blank" rel="noopener">
+            Open UTI PAN Status
+          </a>
+        </div>
+
+        <div class="status-card reveal">
+          <h3>India Speed Post Tracking</h3>
+          <p>Track your Speed Post, Registered Post and other India Post consignments.</p>
+          <a class="btn btn-outline btn-small" href="https://www.indiapost.gov.in/home" target="_blank" rel="noopener">
+            Open India Post Tracking
+          </a>
+        </div>
+
+        <div class="status-card reveal">
+          <h3>Passport Application Status</h3>
+          <p>Check the status of your Indian passport application or renewal.</p>
+          <a class="btn btn-outline btn-small" href="https://www.passportindia.gov.in/psp/trackApplicationService" target="_blank" rel="noopener">
+            Click Here to Track Passport
+          </a>
+        </div>
+
+        <div class="status-card reveal">
+          <h3>Revenue Application Status</h3>
+          <p>
+            Track Revenue applications like Caste Certificate, Income Certificate and other related services.
+          </p>
+          <a class="btn btn-outline btn-small"
+             href="https://ajsk.karnataka.gov.in/NK_Status"
+             target="_blank" rel="noopener">
+            Track Revenue Application
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKEN / QUEUE SYSTEM -->
+  <section id="token" class="token-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Online Token / Queue System</h2>
+      <p class="section-subtitle reveal">
+        Take a token number before visiting the shop and show it at the counter for faster service.
+      </p>
+
+      <div class="token-box reveal">
+        <p class="token-info">Your current token number</p>
+        <div id="tokenNumber" class="token-number">—</div>
+        <p id="tokenMessage" class="token-info">Click the button below to generate your token.</p>
+        <p class="token-small">
+          Note: This is a local token for our shop. Final timing will be confirmed at the counter.
+        </p>
+        <div style="margin-top:0.9rem;">
+          <button type="button" class="btn btn-primary btn-small" onclick="generateToken()">
+            🎟️ Get New Token
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="section-overlay"></div>
+    <div class="container">
+      <h2 class="section-title reveal">Contact &amp; Location</h2>
+      <p class="section-subtitle reveal">
+        Call us, visit the shop or send your details – we will call you back and help you with your work.
+      </p>
+
+      <div class="contact-wrapper">
+        <div class="contact-card reveal">
+          <h3>Reach Us</h3>
+          <p><strong>Shop Name:</strong> Cyber Graphics Online &amp; Xerox Centre</p>
+          <p><strong>Address:</strong> Block No 3, Mamu Complex, Near Bazar Galli, Mannaekhelli, District Bidar, State Karnataka - PIN Code 585227</p>
+          <p><strong>Mobile / WhatsApp:</strong> <a href="https://wa.me/918884537740" target="_blank" rel="noopener">+91-88845 37740</a></p>
+          <p><strong>Email:</strong> cyberwork.mnk@gmail.com</p>
+
+          <p style="margin-top:0.6rem;"><strong>Working Hours:</strong></p>
+          <ul>
+            <li>Monday – Saturday: 9:00 AM to 9:30 PM</li>
+            <li>Sunday / Holidays: As per local timing</li>
+          </ul>
+
+          <p style="margin-top:0.8rem; font-size:0.85rem;">
+            For urgent work, please call or WhatsApp before visiting.
+          </p>
+        </div>
+
+        <div class="contact-card reveal">
+          <h3>Quick Enquiry Form</h3>
+          <form class="contact-form" onsubmit="return sendToWhatsApp(event);">
+            <div>
+              <label for="name">Full Name</label>
+              <input type="text" id="name" placeholder="Enter your name" required />
+            </div>
+            <div>
+              <label for="phone">Mobile Number</label>
+              <input type="tel" id="phone" placeholder="Enter your mobile number" required />
+            </div>
+            <div>
+              <label for="service">Service Required</label>
+              <input type="text" id="service" placeholder="Aadhaar update, PAN card, Passport, Xerox, etc." required />
+            </div>
+            <div>
+              <label for="message">Additional Details (optional)</label>
+              <textarea id="message" placeholder="Write your query here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">📲 Send Enquiry on WhatsApp</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> Cyber Graphics Online &amp; Xerox Centre. All rights reserved.
+  | Designed for <strong>local digital services</strong>.
+</footer>
+
+<div id="toast" class="toast">Enquiry opened in WhatsApp.</div>
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/918884537740?text=Hello%2C%20I%20have%20a%20query." target="_blank" rel="noopener" class="floating-whatsapp" aria-label="Chat on WhatsApp">
+  🟢
+</a>
+
+<?php endif; // end loggedIn ?>
+
+<script>
+  // ---------- YEAR IN FOOTER ----------
+  var yearSpan = document.getElementById("year");
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+
+  // ---------- TOAST ----------
+  function showToast(message) {
+    var toast = document.getElementById("toast");
+    if (!toast) return;
+    if (message) toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(function () {
+      toast.classList.remove("show");
+    }, 3500);
+  }
+
+  // ---------- WHATSAPP FORM SUBMIT ----------
+  function sendToWhatsApp(event) {
+    if (event) event.preventDefault();
+    var name = document.getElementById("name");
+    if (!name) return false; // form not on login page
+
+    var phone = document.getElementById("phone").value.trim();
+    var service = document.getElementById("service").value.trim();
+    var msgInput = document.getElementById("message").value.trim();
+    name = name.value.trim();
+
+    if (!name || !phone || !service) {
+      alert("Please fill Name, Mobile Number and Service Required.");
+      return false;
+    }
+
+    var text =
+      "New enquiry from website:%0A%0A" +
+      "Name: " + encodeURIComponent(name) + "%0A" +
+      "Mobile: " + encodeURIComponent(phone) + "%0A" +
+      "Service Required: " + encodeURIComponent(service) + "%0A" +
+      "Details: " + encodeURIComponent(msgInput || "N/A");
+
+    var url = "https://wa.me/918884537740?text=" + text;
+    window.open(url, "_blank");
+
+    showToast("Enquiry opened in WhatsApp.");
+    return false;
+  }
+
+  // ---------- SIMPLE TOKEN SYSTEM ----------
+  var tokenCounter = 100; // starting token number
+
+  function generateToken() {
+    var tokenEl = document.getElementById("tokenNumber");
+    var msgEl = document.getElementById("tokenMessage");
+    if (!tokenEl || !msgEl) return;
+
+    tokenCounter += 1;
+    tokenEl.textContent = tokenCounter;
+    msgEl.textContent = "Please visit the shop and show this token number at the counter.";
+    showToast("Your token number is " + tokenCounter + ".");
+  }
+
+  // ---------- SCROLL REVEAL ----------
+  (function setupReveal() {
+    var revealElements = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      revealElements.forEach(function (el) {
+        el.classList.add("visible");
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    revealElements.forEach(function (el) {
+      observer.observe(el);
+    });
+  })();
+
+  // ---------- ACTIVE NAV LINK ON SCROLL ----------
+  (function setupActiveNav() {
+    var sections = document.querySelectorAll("main section[id]");
+    var navLinks = document.querySelectorAll(".nav-link");
+    if (!sections.length || !navLinks.length) return;
+
+    function setActiveLink() {
+      var scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+      var currentId = "home";
+
+      sections.forEach(function (section) {
+        var rect = section.getBoundingClientRect();
+        var offsetTop = rect.top + window.pageYOffset - 120;
+        if (scrollPos >= offsetTop) {
+          currentId = section.id;
+        }
+      });
+
+      navLinks.forEach(function (link) {
+        if (link.getAttribute("href") === "#" + currentId) {
+          link.classList.add("active-link");
+        } else if (currentId === "home" && link.getAttribute("href") === "#home") {
+          link.classList.add("active-link");
+        } else {
+          link.classList.remove("active-link");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", setActiveLink);
+    setActiveLink();
+  })();
+</script>
+
+</body>
+</html>
