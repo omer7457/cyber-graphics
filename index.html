@@ -25,7 +25,7 @@ crossorigin="anonymous"></script>
     }
 
     body {
-      background: radial-gradient(circle at top left, #101936, #050814 55%, #02030a 100%);
+      background: transparent !important;(circle at top left, #101936, #050814 55%, #02030a 100%);
       color: #e9edf7;
       line-height: 1.6;
     }
@@ -175,7 +175,7 @@ crossorigin="anonymous"></script>
     .hero-section {
       position: relative;
       overflow: hidden;
-      background: radial-gradient(circle at top right, #283593 0, #0d1330 40%, #050814 90%);
+      background: transparent(circle at top right, #283593 0, #0d1330 40%, #050814 90%);
     }
 
     .hero-section::before,
@@ -310,7 +310,7 @@ crossorigin="anonymous"></script>
 
     /* ---------- SERVICES ---------- */
     .services-section {
-      background: radial-gradient(circle at top, #11163a, #050814 70%);
+      background: transparent;(circle at top, #11163a, #050814 70%);
     }
 
     .services-grid {
@@ -364,10 +364,76 @@ crossorigin="anonymous"></script>
       position: relative;
       z-index: 1;
     }
+    <!-- DOWNLOADS SECTION -->
+<section id="downloads" class="services-section">
+  <div class="section-overlay"></div>
+  <div class="container">
+
+    <h2 class="section-title reveal">📥 Downloads & Forms</h2>
+
+    <p class="section-subtitle reveal">
+      Download important forms, formats and useful documents for your services.
+    </p>
+
+    <div class="tickets-grid">
+
+      <div class="ticket-card reveal">
+        <h3>🪪 Voter ID Forms</h3>
+        <p>New registration, correction and migration forms.</p>
+        <a class="btn btn-outline btn-small" href="#" download>
+          Download Voter Forms
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>🧾 PAN Card Forms</h3>
+        <p>New PAN (49A) and correction forms.</p>
+        <a class="btn btn-outline btn-small" href="#" download>
+          Download PAN Forms
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>🪪 Aadhaar Update Forms</h3>
+        <p>Aadhaar correction & update form PDF.</p>
+        <a class="btn btn-outline btn-small" href="#" download>
+          Download Aadhaar Form
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>📄 SIR Forms (2002 Help)</h3>
+        <p>Pre-filled SIR assistance forms for citizens.</p>
+        <a class="btn btn-primary btn-small" href="#" download>
+          Download SIR Form
+          href="SIR FORM CG-1.pdf"
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>🏦 Bank Forms</h3>
+        <p>Account opening, KYC and banking forms.</p>
+        <a class="btn btn-outline btn-small" href="#" download>
+          Download Bank Forms
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>📑 Other Documents</h3>
+        <p>Affidavit, applications and general formats.</p>
+        <a class="btn btn-outline btn-small" href="#" download>
+          Download Documents
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
     /* ---------- TICKET BOOKING ---------- */
     .tickets-section {
-      background: radial-gradient(circle at top, #0b253a, #050814 70%);
+       background: transparent;(circle at top, #0b253a, #050814 70%);
     }
 
     .tickets-grid {
@@ -420,14 +486,14 @@ crossorigin="anonymous"></script>
 
     /* ---------- BANKING ---------- */
     .banking-section {
-      background: radial-gradient(circle at top, #061d33, #050814 70%);
+       background: transparent(circle at top, #061d33, #050814 70%);
     }
 
     /* Reuse .tickets-grid & .ticket-card styles */
 
     /* ---------- ABOUT ---------- */
     .about-section {
-      background: radial-gradient(circle at top, #101c3f, #050814 70%);
+       background: transparent;(circle at top, #101c3f, #050814 70%);
     }
 
     .about {
@@ -545,7 +611,7 @@ crossorigin="anonymous"></script>
 
     /* ---------- STATUS TRACKING ---------- */
     .status-section {
-      background: radial-gradient(circle at top, #0c2039, #050814 70%);
+      background: transparent;(circle at top, #0c2039, #050814 70%);
     }
 
     .status-grid {
@@ -818,6 +884,49 @@ crossorigin="anonymous"></script>
         font-size: 1.4rem;
       }
     }
+    @media (max-width: 600px) {
+  ...
+}
+
+/* 🔍 PASTE HERE 👇 */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#searchBox {
+  width: 35px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 0.8rem;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.search-container:hover #searchBox {
+  width: 160px;
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 10px rgba(66,165,245,0.8);
+}
+
+#searchBox:focus {
+  width: 180px;
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 14px rgba(66,165,245,1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 0.8rem;
+  pointer-events: none;
+  color: #bbdefb;
+}
   </style>
 </head>
 <body>
@@ -829,6 +938,13 @@ crossorigin="anonymous"></script>
     </div>
     <nav>
       <ul>
+        <li style="margin-left:10px;">
+  <li class="search-container">
+  <input type="text" id="searchBox" placeholder="Search services..." />
+  <span class="search-icon">🔍</span>
+</li>
+    
+</li>
         <li><a href="#sbi-csp" class="nav-link">SBI CSP</a></li>
         <li><a href="#home" class="nav-link active-link">Home</a></li>
         <li><a href="#services" class="nav-link">Services</a></li>
@@ -838,6 +954,7 @@ crossorigin="anonymous"></script>
         <li><a href="#gallery" class="nav-link">Gallery</a></li>
         <li><a href="#reviews" class="nav-link">Reviews</a></li>
         <li><a href="#status" class="nav-link">Status Track</a></li>
+        <li><a href="#sssss" class="nav-link">Downloads</a></li>
         <li><a href="#token" class="nav-link">Token</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
@@ -845,7 +962,7 @@ crossorigin="anonymous"></script>
   </div>
 </header>
 
-<main id="home">
+<main  <section class="hero-section" id="home"></section> ">
   <!-- HERO -->
   <section class="hero-section">
     <div class="container hero">
@@ -888,6 +1005,89 @@ crossorigin="anonymous"></script>
 
   <!-- SERVICES -->
   <section id="services" class="services-section">
+    <!-- SIR SECTION -->
+<section id="sir" class="services-section">
+  <div class="section-overlay"></div>
+  <div class="container">
+
+    <h1 class="section-title reveal">
+      SIR (Special Intensive Revision - 2002)
+    </h2>
+
+    <p class="section-subtitle reveal">
+      Check your name in the old Electoral Roll (SIR 2002) and verify your voter details.
+    </p>
+
+    <!-- 🔴 Moving Attention -->
+    <marquee behavior="scroll" direction="left" scrollamount="6" 
+      style="color:#ff5252; font-weight:bold; margin-bottom:15px;">
+      ⚠️ ATTENTION: SIR (Special Intensive Revision - 2002) data is based on old voter records. Please enter details exactly as per 2002 records.
+    </marquee>
+
+    <!-- GUIDELINES -->
+    <div class="ticket-card reveal" style="margin-bottom:20px;">
+      <h3>📌 Important Guidelines</h3>
+      <ul>
+        <li>Use correct spelling as per 2002 voter list.</li>
+        <li>Try different name variations if not found.</li>
+        <li>Enter details like Name, Relative Name, Age carefully.</li>
+        <li>Old EPIC / Voter ID number can help for direct search.</li>
+        <li>Data is based on old electoral rolls and may differ from current records.</li>
+        <li>Search is available in local language also (Kannada / Telugu / Hindi).</li>
+        <li>If not found, try searching with district, AC and part number.</li>
+      </ul>
+    </div>
+
+    <!-- LINKS -->
+    <div class="tickets-grid">
+
+      <div class="ticket-card reveal">
+        <h3>🔎 Direct Check (Karnataka)</h3>
+        <p>Check your name using old EPIC / Voter ID number.</p>
+        <a class="btn btn-primary btn-small"
+           href="https://ceo.karnataka.gov.in/search/en"
+           target="_blank">
+           Direct Check Your Name in Last SIR 2002
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>📄 Download SIR 2002 List</h3>
+        <p>View and download Karnataka Electoral Roll 2002 PDF.</p>
+        <a class="btn btn-outline btn-small"
+           href="https://ceo.karnataka.gov.in/voter_list/en"
+           target="_blank">
+           View Download 2002 SIR List Karnataka
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>📍 Telangana SIR 2002</h3>
+        <p>Access Telangana Electoral Roll (SIR 2002).</p>
+        <a class="btn btn-outline btn-small"
+           href="https://ceotserms2.telangana.gov.in/sir2002/rolls.aspx"
+           target="_blank">
+           Telangana Electoral Roll of SIR 2002
+        </a>
+      </div>
+
+      <div class="ticket-card reveal">
+        <h3>🌐 All India Search</h3>
+        <p>Search voter details for all states.</p>
+        <p style="font-size:0.75rem; color:#ffcc80;">
+          Note: Enter the details exactly as per 2002 records.
+        </p>
+        <a class="btn btn-primary btn-small"
+           href="https://voters.eci.gov.in/searchInSIR/S2UA4DPDF-JK4QWODSE"
+           target="_blank">
+           Electoral Search for All States
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
     <div class="section-overlay"></div>
     <div class="container">
       <h2 class="section-title reveal">Our Digital &amp; Printing Services</h2>
@@ -956,8 +1156,8 @@ crossorigin="anonymous"></script>
 
       <div class="services-actions reveal">
         <!-- Place a file named price-list.pdf in same folder -->
-        <a class="btn btn-outline btn-small" href="price-list.pdf" download>
-          ⬇ Download Service Price List (PDF)
+        <a class="btn btn-outline btn-small" href="SIR FORM CG-1.pdf"" download>
+          ⬇ Download SIR (Serial Incentive Revision) Pre Filled Form (PDF)
         </a>
       </div>
     </div>
@@ -1230,6 +1430,146 @@ crossorigin="anonymous"></script>
 
   <!-- ABOUT -->
   <section id="about" class="about-section">
+    <!-- 🔥 PREMIUM CSC SECTION (FINAL UPGRADE) -->
+<section id="csc-info" class="about-section" style="position:relative; overflow:hidden;">
+
+  <!-- 🔵 BLUE GLOW -->
+  <div style="
+    position:absolute;
+    width:320px;height:320px;
+    background:#1e88e5;
+    filter:blur(120px);
+    top:-100px;left:-100px;
+    opacity:0.25;
+    animation:floatBlob 12s infinite alternate;">
+  </div>
+
+  <!-- 🔴 ORANGE GLOW -->
+  <div style="
+    position:absolute;
+    width:260px;height:260px;
+    background:#ff7043;
+    filter:blur(120px);
+    bottom:-80px;right:-80px;
+    opacity:0.25;
+    animation:floatBlob 14s infinite alternate;">
+  </div>
+
+  <div class="section-overlay"></div>
+
+  <div class="container">
+
+    <!-- 🔥 HEADER -->
+    <div class="ticket-card reveal" style="
+      text-align:center;
+      background:linear-gradient(135deg,#0d47a1,#1565c0,#1e88e5);
+      box-shadow:0 10px 40px rgba(30,136,229,0.6);
+      border:1px solid rgba(144,202,249,0.6);
+      margin-bottom:25px;
+    ">
+      <h2 style="color:#fff;">🌐 CSC Digital Service Center</h2>
+      <p style="color:#e3f2fd;font-size:0.9rem;">
+        Government • Banking • Online Services • Digital India
+      </p>
+    </div>
+
+    <!-- 🏢 WHAT IS CSC -->
+    <div class="ticket-card reveal premium-card">
+      <h3>🏢 What is CSC?</h3>
+      <p>
+        CSC (Common Service Center) is a flagship initiative under Digital India Programme
+        to provide digital services in rural and urban areas through VLEs.
+      </p>
+    </div>
+
+    <!-- 📜 HISTORY -->
+    <h3 class="section-title reveal" style="margin-top:30px;">📜 CSC Evolution</h3>
+
+    <div class="tickets-grid">
+
+      <div class="ticket-card reveal premium-card">
+        <h3>🚀 2006</h3>
+        <p>Started under NeGP</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>📈 2015</h3>
+        <p>CSC 2.0 Expansion</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>🌍 Today</h3>
+        <p>Digital Revolution</p>
+      </div>
+
+    </div>
+
+    <!-- 🧾 SERVICES -->
+    <h3 class="section-title reveal" style="margin-top:30px;">🧾 Services</h3>
+
+    <div class="tickets-grid">
+
+      <div class="ticket-card reveal premium-card">
+        <h3>🏛️ Govt</h3>
+        <p>Aadhaar • PAN • Passport</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>💳 Banking</h3>
+        <p>AEPS • Transfer • Insurance</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>📱 Utility</h3>
+        <p>Recharge • Bills • Tickets</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>🎓 Education</h3>
+        <p>Courses • Exams • PMGDISHA</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>🏥 Health</h3>
+        <p>Telemedicine • Doctor</p>
+      </div>
+
+      <div class="ticket-card reveal premium-card">
+        <h3>🛒 eStore</h3>
+        <p>Online Selling • Delivery</p>
+      </div>
+
+    </div>
+
+    <!-- 🚀 IMPACT -->
+    <div class="ticket-card reveal" style="
+      margin-top:30px;
+      background:linear-gradient(135deg,#1b5e20,#2e7d32,#43a047);
+      text-align:center;
+      box-shadow:0 8px 30px rgba(76,175,80,0.6);
+    ">
+      <h3 style="color:#e8f5e9;">🚀 Digital Impact</h3>
+      <p style="color:#c8e6c9;">
+        🌐 Internet • 💼 Jobs • 🏦 Banking • 📲 Digital Growth
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- 🔥 PREMIUM HOVER EFFECT -->
+<style>
+.premium-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(144,202,249,0.3);
+}
+
+.premium-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(33,150,243,0.7);
+  border-color: rgba(144,202,249,0.9);
+}
+</style>
     <div class="section-overlay"></div>
     <div class="container about">
       <div class="reveal">
@@ -1381,31 +1721,6 @@ crossorigin="anonymous"></script>
     </div>
   </section>
 
-  <!-- TOKEN / QUEUE SYSTEM -->
-  <section id="token" class="token-section">
-    <div class="section-overlay"></div>
-    <div class="container">
-      <h2 class="section-title reveal">Online Token / Queue System</h2>
-      <p class="section-subtitle reveal">
-        Take a token number before visiting the shop and show it at the counter for faster service.
-      </p>
-
-      <div class="token-box reveal">
-        <p class="token-info">Your current token number</p>
-        <div id="tokenNumber" class="token-number">—</div>
-        <p id="tokenMessage" class="token-info">Click the button below to generate your token.</p>
-        <p class="token-small">
-          Note: This is a local token for our shop. Final timing will be confirmed at the counter.
-        </p>
-        <div style="margin-top:0.9rem;">
-          <button type="button" class="btn btn-primary btn-small" onclick="generateToken()">
-            🎟️ Get New Token
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- CONTACT -->
   <section id="contact" class="contact-section">
     <div class="section-overlay"></div>
@@ -1459,6 +1774,7 @@ crossorigin="anonymous"></script>
       </div>
     </div>
   </section>
+  
 </main>
 
 <footer>
@@ -1592,6 +1908,26 @@ crossorigin="anonymous"></script>
   })();
 </script>
 
+<!-- VANTA JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+<script>
+VANTA.NET({
+  el: "#home",
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  scale: 1.00,
+  scaleMobile: 1.00,
+  color: 0xff3f3f,
+  backgroundColor: 0x0b1330,
+  points: 12.0,
+  maxDistance: 20.0,
+  spacing: 15.0
+});
+</script>
 </body>
 </html>
 
